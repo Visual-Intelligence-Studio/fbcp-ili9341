@@ -95,6 +95,12 @@ void InitST7735R()
       SPI_TRANSFER(0x37/*VSCSAD: Vertical Scroll Start Address of RAM*/, 0, 320 - DISPLAY_WIDTH);
 #endif
 
+#ifdef ST7789VW
+    // TODO: the 1.14 inch screen has a weird offset of 40 px on the xaxis so we need to substract that
+    if ((madctl & MADCTL_ROW_ADDRESS_ORDER_SWAP))
+      SPI_TRANSFER(0x37/*VSCSAD: Vertical Scroll Start Address of RAM*/, 0, 320 - 40 - DISPLAY_WIDTH);
+#endif
+
     // TODO: The 0xB1 command is not Frame Rate Control for ST7789VW, 0xB3 is (add support to it)
 #ifndef ST7789VW
     // Frame rate = 850000 / [ (2*RTNA+40) * (162 + FPA+BPA)]
